@@ -26,21 +26,23 @@ class InfluxdbError(IOError):
             "Request failed (status='{}', reason='{}', params='{}'): {}".format(
             response.status, response.reason, params, body))
 
-def PostSamples(database, host, lines):
+def PostSamples(database, host, lines, token, org):
     """Sends a list of lines to a given InfluxDB database.
     
     Args:
-        database: Target database name.
+        database: Target bucket name.
         host: The host running the database.
         lines: String in the InfluxDB line format.
+        token: InfluxDB token
+        org: InfluxDB org name or id
     Raises:
         IOError when connection to the database fails.
     """
     logging.debug("Sending lines: %s", lines)
-    params = urllib.urlencode({'db': database, 'precision': 'ns'})
+    params = urllib.urlencode({'bucket': database, 'org': org, 'precision': 'ns'})
     conn = httplib.HTTPConnection(host)
     body = '\n'.join(lines) + '\n'
-    conn.request("POST", "/api/v2/write?" + params, body=body, headers={})
+    conn.request("POST", "/api/v2/write?" + params, body=body, headers={"Authorization": "Token "+token})
     response = conn.getresponse()
     if int(response.status) / 100 != 2:
         raise InfluxdbError(params, body, response)

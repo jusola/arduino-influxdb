@@ -54,7 +54,7 @@ def WriteLoop(args, queue):
     logging.debug("Write loop started")
     try:
         for influxdb_line in queue.get_blocking(tick=60):
-            influxdb.PostSamples(args.database, args.host, [influxdb_line])
+            influxdb.PostSamples(args.database, args.host, [influxdb_line], args.token)
     except:
         logging.exception("Error, retrying with backoff")
         raise
@@ -93,6 +93,10 @@ def main():
                         help='host and port with InfluxDB to send data to')
     parser.add_argument('-D', '--database', required=True,
                         help='database to save data to')
+    parser.add_argument('-t', '--token', required=True,
+                        help='Token for influxdb')
+    parser.add_argument('-o', '--org', required=True,
+                        help='Org for influxdb')                     
     parser.add_argument('-T', '--tags', default='',
                         help='additional static tags for measurements'
                              ' separated by comma, for example foo=x,bar=y')
