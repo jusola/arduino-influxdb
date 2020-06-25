@@ -40,7 +40,7 @@ def PostSamples(database, host, lines):
     params = urllib.urlencode({'db': database, 'precision': 'ns'})
     conn = httplib.HTTPConnection(host)
     body = '\n'.join(lines) + '\n'
-    conn.request("POST", "/write?" + params, body=body, headers={})
+    conn.request("POST", "/api/v2/write?" + params, body=body, headers={})
     response = conn.getresponse()
     if int(response.status) / 100 != 2:
         raise InfluxdbError(params, body, response)

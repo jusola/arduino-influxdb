@@ -82,7 +82,7 @@ def main():
     parser.add_argument('-d', '--device', required=True,
                         help='serial device to read from, or a URL accepted '
                              'by serial_for_url()')
-    parser.add_argument('-r', '--baud-rate', type=int, default=9600,
+    parser.add_argument('-r', '--baud-rate', type=int, default=115200,
                         help='baud rate of the serial device')
     parser.add_argument('--read-timeout', type=int, default=60,
                         help='read timeout on the serial device')
