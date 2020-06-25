@@ -54,7 +54,7 @@ def WriteLoop(args, queue):
     logging.debug("Write loop started")
     try:
         for influxdb_line in queue.get_blocking(tick=60):
-            influxdb.PostSamples(args.database, args.host, [influxdb_line], args.token)
+            influxdb.PostSamples(args.database, args.host, [influxdb_line], args.token, args.org)
     except:
         logging.exception("Error, retrying with backoff")
         raise
